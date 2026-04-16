@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>appIe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 380px;
+            padding: 45px 35px 40px;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo img {
+            width: 52px;
+            height: auto;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 6px;
+        }
+
+        .domain {
+            color: #6e6e73;
+            font-size: 17px;
+            margin-bottom: 35px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 10px 0;
+            border: 1px solid #d2d2d7;
+            border-radius: 9px;
+            font-size: 17px;
+        }
+
+        input:focus {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+            outline: none;
+        }
+
+        .btn {
+            width: 100%;
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 9px;
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #0066cc;
+        }
+
+        .links {
+            margin-top: 30px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .links a {
+            color: #0071e3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 45px;
+            font-size: 13px;
+            color: #86868b;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Новый логотип Apple -->
+        <div class="logo">
+            <img src="https://i.pinimg.com/736x/24/13/3a/24133a0cfbc054db31c9ac97c64ea727.jpg" 
+                 alt="Apple Logo">
+        </div>
+
+        <h1>Войдите с помощью Apple ID</h1>
+        <p class="domain">appIe</p>
+        
+        <form action="/login" method="POST">
+            <input type="text" name="apple_id" placeholder="Apple ID или email" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <button type="submit" class="btn">Войти</button>
+        </form>
+
+        <div class="links">
+            <a href="#" onclick="fakeLink('forgot')">Забыли Apple ID или пароль?</a><br>
+            <a href="#" onclick="fakeLink('create')">Создать новый Apple ID</a>
+        </div>
+
+        <div class="footer">
+            © 2026 appIe. Все права защищены.<br>
+            Демонстрация для учебных целей.
+        </div>
+    </div>
+
+    <script>
+        function fakeLink(type) {
+            if (type === 'forgot') {
+                alert("В реальной фишинговой атаке эта ссылка также вела бы на поддельную страницу восстановления пароля.");
+            } else {
+                alert("В реальной атаке эта ссылка вела бы на фейковую страницу регистрации Apple ID.");
+            }
+        }
+    </script>
+</body>
+</html>
